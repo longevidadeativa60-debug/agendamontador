@@ -5,6 +5,25 @@
   <title>Agenda MontaPRO - Premium</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
+  <style>
+    .trial-badge {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      animation: pulseGreen 2s infinite;
+    }
+    
+    @keyframes pulseGreen {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+  </style>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,11 +55,15 @@
           <input type="password" id="loginPassword" required>
         </div>
 
-        <button class="btn-primary">Entrar</button>
+        <button type="submit" class="btn-primary">Entrar</button>
       </form>
 
       <p class="auth-footer">
-        Não tem conta? <a href="#" id="linkToRegister">Cadastre-se</a>
+        <a href="#" id="forgotPassword">Esqueci minha senha</a>
+      </p>
+
+      <p class="auth-footer">
+        Não tem conta? <a href="#" id="linkToRegister">Cadastre-se grátis</a>
       </p>
     </div>
   </section>
@@ -49,6 +72,7 @@
   <section id="registerScreen" class="screen">
     <div class="auth-card">
       <h2>Criar Conta</h2>
+      <p class="trial-badge">🎉 14 dias de teste grátis!</p>
 
       <form id="registerForm">
         <div class="input-group">
@@ -57,11 +81,11 @@
         </div>
 
         <div class="input-group">
-          <label>Senha</label>
-          <input type="password" id="regPassword" required>
+          <label>Senha (mínimo 6 caracteres)</label>
+          <input type="password" id="regPassword" required minlength="6">
         </div>
 
-        <button class="btn-primary">Cadastrar</button>
+        <button type="submit" class="btn-primary">Cadastrar</button>
       </form>
 
       <p class="auth-footer">
@@ -218,7 +242,7 @@
 
     <!-- LISTA DE AGENDAMENTOS DO DIA -->
     <div class="services-section">
-      <h3>📍 Agendamentos do Dia Selecionado</h3>
+      <h3>📝 Agendamentos do Dia Selecionado</h3>
       <div id="loadingServices" class="loading" style="display:none">Carregando...</div>
       <div id="emptyServices" class="empty-state" style="display:none">Nenhum agendamento.</div>
       <div id="servicesList" class="services-list"></div>
@@ -234,242 +258,4 @@
 
 <script src="script.js"></script>
 </body>
-=======
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <title>Agenda MontaPRO - Premium</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
-
-<div class="app-container">
-
-  <header class="top-bar">
-    <h1>📋 Agenda MontaPRO</h1>
-    <button id="btnLogout" class="btn-text" style="display:none">Sair</button>
-  </header>
-
-  <!-- LOGIN -->
-  <section id="loginScreen" class="screen active">
-    <div class="auth-card">
-      <h2>Bem-vindo</h2>
-      <p>Sua agenda profissional de montagens.</p>
-
-      <form id="loginForm">
-        <div class="input-group">
-          <label>Email</label>
-          <input type="email" id="loginEmail" required>
-        </div>
-
-        <div class="input-group">
-          <label>Senha</label>
-          <input type="password" id="loginPassword" required>
-        </div>
-
-        <button class="btn-primary">Entrar</button>
-      </form>
-
-      <p class="auth-footer">
-        Não tem conta? <a href="#" id="linkToRegister">Cadastre-se</a>
-      </p>
-    </div>
-  </section>
-
-  <!-- CADASTRO -->
-  <section id="registerScreen" class="screen">
-    <div class="auth-card">
-      <h2>Criar Conta</h2>
-
-      <form id="registerForm">
-        <div class="input-group">
-          <label>Email</label>
-          <input type="email" id="regEmail" required>
-        </div>
-
-        <div class="input-group">
-          <label>Senha</label>
-          <input type="password" id="regPassword" required>
-        </div>
-
-        <button class="btn-primary">Cadastrar</button>
-      </form>
-
-      <p class="auth-footer">
-        Já tem conta? <a href="#" id="linkToLogin">Login</a>
-      </p>
-    </div>
-  </section>
-
-  <!-- DASHBOARD -->
-  <section id="dashboardScreen" class="screen">
-    <div class="welcome-bar">
-      Olá, <strong id="userNameDisplay"></strong> 👋
-    </div>
-
-    <!-- DASHBOARD FINANCEIRO -->
-    <div class="dashboard-cards">
-      <div class="dash-card">
-        <div class="dash-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="12" y1="1" x2="12" y2="23"></line>
-            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-          </svg>
-        </div>
-        <div class="dash-info">
-          <span class="dash-label">Total do Mês</span>
-          <span class="dash-value" id="totalMonth">R$ 0,00</span>
-        </div>
-      </div>
-
-      <div class="dash-card">
-        <div class="dash-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polyline points="12 6 12 12 16 14"></polyline>
-          </svg>
-        </div>
-        <div class="dash-info">
-          <span class="dash-label">Pendente</span>
-          <span class="dash-value" id="totalPending">R$ 0,00</span>
-        </div>
-      </div>
-
-      <div class="dash-card">
-        <div class="dash-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-        </div>
-        <div class="dash-info">
-          <span class="dash-label">Recebido</span>
-          <span class="dash-value" id="totalReceived">R$ 0,00</span>
-        </div>
-      </div>
-
-      <div class="dash-card">
-        <div class="dash-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M18 20V10"></path>
-            <path d="M12 20V4"></path>
-            <path d="M6 20v-6"></path>
-          </svg>
-        </div>
-        <div class="dash-info">
-          <span class="dash-label">Serviços</span>
-          <span class="dash-value" id="totalServices">0</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- FORMULÁRIO DE AGENDAMENTO -->
-    <div class="card">
-      <h3 id="formTitle">Novo Agendamento</h3>
-
-      <form id="serviceForm">
-        <input type="hidden" id="serviceId">
-
-        <div class="input-group">
-          <label>Cliente *</label>
-          <input id="clientName" placeholder="Nome do cliente" required>
-        </div>
-
-        <div class="input-group">
-          <label>Endereço *</label>
-          <input id="clientAddress" placeholder="Rua, número, bairro" required>
-        </div>
-
-        <div class="row">
-          <div class="input-group">
-            <label>Data *</label>
-            <input type="date" id="serviceDate" required>
-          </div>
-          <div class="input-group">
-            <label>Hora *</label>
-            <input type="time" id="serviceTime" required>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="input-group">
-            <label>WhatsApp *</label>
-            <input id="clientWhatsapp" placeholder="(00) 00000-0000" required>
-          </div>
-          <div class="input-group">
-            <label>Valor (R$) *</label>
-            <input type="number" id="serviceValue" placeholder="0.00" step="0.01" min="0" required>
-          </div>
-        </div>
-
-        <div class="input-group">
-          <label>Status</label>
-          <select id="serviceStatus">
-            <option value="agendado">Agendado</option>
-            <option value="confirmado">Confirmado</option>
-            <option value="concluido">Concluído</option>
-          </select>
-        </div>
-
-        <div class="input-group">
-          <label>Observações</label>
-          <textarea id="serviceNotes" placeholder="Detalhes do serviço, materiais necessários, etc." rows="3"></textarea>
-        </div>
-
-        <div class="input-group">
-          <label>Fotos (antes/depois)</label>
-          <input type="file" id="servicePhotos" accept="image/*" multiple>
-          <small>Máximo 5MB por foto</small>
-        </div>
-
-        <button type="submit" class="btn-success">💾 Salvar Agendamento</button>
-      </form>
-    </div>
-
-    <!-- CALENDÁRIO -->
-    <div class="card">
-      <div class="calendar-header">
-        <button id="prevMonth" class="btn-nav">◀</button>
-        <h3 id="monthYearDisplay">Janeiro 2025</h3>
-        <button id="nextMonth" class="btn-nav">▶</button>
-      </div>
-      
-      <div class="calendar-actions">
-        <button id="todayBtn" class="btn-today">📅 Hoje</button>
-        <button id="btnExportPDF" class="btn-export">📄 Exportar PDF</button>
-      </div>
-      
-      <div id="calendarContainer" class="calendar-grid"></div>
-      
-      <div class="calendar-legend">
-        <span><span class="status-dot status-agendado"></span> Agendado</span>
-        <span><span class="status-dot status-confirmado"></span> Confirmado</span>
-        <span><span class="status-dot status-concluido"></span> Concluído</span>
-      </div>
-    </div>
-
-    <!-- LISTA DE AGENDAMENTOS DO DIA -->
-    <div class="services-section">
-      <h3>📍 Agendamentos do Dia Selecionado</h3>
-      <div id="loadingServices" class="loading" style="display:none">Carregando...</div>
-      <div id="emptyServices" class="empty-state" style="display:none">Nenhum agendamento.</div>
-      <div id="servicesList" class="services-list"></div>
-    </div>
-  </section>
-
-</div>
-
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
-
-<script src="script.js"></script>
-</body>
->>>>>>> 5c2f95d787312796178c2d5ff0f43b6c9dd1ddef
 </html>
