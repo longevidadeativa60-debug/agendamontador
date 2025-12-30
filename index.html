@@ -156,70 +156,85 @@
     </div>
 
     <!-- FORMULÁRIO DE AGENDAMENTO -->
-    <div class="card">
-      <h3 id="formTitle">Novo Agendamento</h3>
+    <div class="card card-form">
+      <div class="form-header">
+        <h3 id="formTitle">📝 Novo Agendamento</h3>
+        <p class="form-subtitle">Preencha os dados do cliente e do serviço</p>
+      </div>
 
       <form id="serviceForm">
         <input type="hidden" id="serviceId">
 
-        <div class="input-group">
-          <label>Cliente *</label>
-          <input id="clientName" placeholder="Nome do cliente" required>
-        </div>
-
-        <div class="input-group">
-          <label>Endereço *</label>
-          <input id="clientAddress" placeholder="Rua, número, bairro" required>
-        </div>
-
-        <div class="row">
+        <div class="form-section">
+          <h4 class="section-title">Informações do Cliente</h4>
+          
           <div class="input-group">
-            <label>Data *</label>
-            <input type="date" id="serviceDate" required>
+            <label>Cliente *</label>
+            <input id="clientName" placeholder="Nome completo do cliente" required>
           </div>
-          <div class="input-group">
-            <label>Hora *</label>
-            <input type="time" id="serviceTime" required>
-          </div>
-        </div>
 
-        <div class="row">
+          <div class="input-group">
+            <label>Endereço *</label>
+            <input id="clientAddress" placeholder="Rua, número, bairro, cidade" required>
+          </div>
+
           <div class="input-group">
             <label>WhatsApp *</label>
             <input id="clientWhatsapp" placeholder="(00) 00000-0000" required>
           </div>
-          <div class="input-group">
-            <label>Valor (R$) *</label>
-            <input type="number" id="serviceValue" placeholder="0.00" step="0.01" min="0" required>
+        </div>
+
+        <div class="form-section">
+          <h4 class="section-title">Detalhes do Serviço</h4>
+          
+          <div class="row">
+            <div class="input-group">
+              <label>Data *</label>
+              <input type="date" id="serviceDate" required>
+            </div>
+            <div class="input-group">
+              <label>Hora *</label>
+              <input type="time" id="serviceTime" required>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-group">
+              <label>Valor (R$) *</label>
+              <input type="number" id="serviceValue" placeholder="0.00" step="0.01" min="0" required>
+            </div>
+            <div class="input-group">
+              <label>Status</label>
+              <select id="serviceStatus">
+                <option value="agendado">Agendado</option>
+                <option value="confirmado">Confirmado</option>
+                <option value="concluido">Concluído</option>
+              </select>
+            </div>
           </div>
         </div>
 
-        <div class="input-group">
-          <label>Status</label>
-          <select id="serviceStatus">
-            <option value="agendado">Agendado</option>
-            <option value="confirmado">Confirmado</option>
-            <option value="concluido">Concluído</option>
-          </select>
+        <div class="form-section">
+          <h4 class="section-title">Informações Adicionais</h4>
+          
+          <div class="input-group">
+            <label>Observações</label>
+            <textarea id="serviceNotes" placeholder="Detalhes do serviço, materiais necessários, instruções especiais..." rows="3"></textarea>
+          </div>
+
+          <div class="input-group">
+            <label>Fotos (antes/depois)</label>
+            <input type="file" id="servicePhotos" accept="image/*" multiple>
+            <small>Máximo 5MB por foto</small>
+          </div>
         </div>
 
-        <div class="input-group">
-          <label>Observações</label>
-          <textarea id="serviceNotes" placeholder="Detalhes do serviço, materiais necessários, etc." rows="3"></textarea>
-        </div>
-
-        <div class="input-group">
-          <label>Fotos (antes/depois)</label>
-          <input type="file" id="servicePhotos" accept="image/*" multiple>
-          <small>Máximo 5MB por foto</small>
-        </div>
-
-        <button type="submit" class="btn-success">💾 Salvar Agendamento</button>
+        <button type="submit" class="btn-success btn-lg">💾 Salvar Agendamento</button>
       </form>
     </div>
 
     <!-- CALENDÁRIO -->
-    <div class="card">
+    <div class="card card-calendar">
       <div class="calendar-header">
         <button id="prevMonth" class="btn-nav">◀</button>
         <h3 id="monthYearDisplay">Janeiro 2025</h3>

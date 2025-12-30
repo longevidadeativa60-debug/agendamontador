@@ -1,3 +1,4 @@
+// 🔥 FIREBASE CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyDO7ZVtrHv9pBZ4VK18amIEW4v9xrXCVCY",
   authDomain: "agenda-montador.firebaseapp.com",
@@ -205,18 +206,33 @@ loginForm.addEventListener('submit', async e => {
   }
 });
 
-// 🔥 CADASTRO
+// 🔥 LOGOUT
+btnLogout.addEventListener('click', async () => {
+  try {
+    await auth.signOut();
+    alert('Você saiu com sucesso!');
+  } catch (error) {
+    alert('Erro ao sair: ' + error.message);
+  }
+});
+
+// 🔥 REGISTRO
+linkToRegister.addEventListener('click', e => {
+  e.preventDefault();
+  switchScreen('register');
+});
+
+linkToLogin.addEventListener('click', e => {
+  e.preventDefault();
+  switchScreen('login');
+});
+
 registerForm.addEventListener('submit', async e => {
   e.preventDefault();
   
   const regEmail = document.getElementById('regEmail');
   const regPassword = document.getElementById('regPassword');
   const btn = e.target.querySelector('button');
-  
-  if (regPassword.value.length < 6) {
-    alert('❌ A senha deve ter no mínimo 6 caracteres!');
-    return;
-  }
   
   try {
     btn.textContent = 'Cadastrando...';
@@ -228,73 +244,55 @@ registerForm.addEventListener('submit', async e => {
       regPassword.value
     );
     
-    // Cria documento do usuário com trial de 14 dias
+    const user = userCredential.user;
     const trialEndDate = new Date();
     trialEndDate.setDate(trialEndDate.getDate() + 14);
     
-    await db.collection('users').doc(userCredential.user.uid).set({
-      email: regEmail.value,
+    // Cria documento do usuário
+    await db.collection('users').doc(user.uid).set({
+      email: user.email,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       trialEndDate: firebase.firestore.Timestamp.fromDate(trialEndDate),
       isPremium: false,
       isTrialActive: true
     });
     
-    console.log('✅ Cadastro realizado!');
-    alert('🎉 Cadastro realizado! Você tem 14 dias de teste grátis!');
+    console.log('✅ Conta criada com sucesso!');
+    alert('✅ Conta criada! Você tem 14 dias de teste grátis.');
     
   } catch (error) {
-    console.error('❌ Erro no cadastro:', error);
+    console.error('❌ Erro no registro:', error);
     btn.textContent = 'Cadastrar';
     btn.disabled = false;
     
     if (error.code === 'auth/email-already-in-use') {
-      alert('❌ Este email já está cadastrado. Faça login.');
-    } else if (error.code === 'auth/invalid-email') {
-      alert('❌ Email inválido.');
+      alert('❌ Este email já está registrado.');
     } else if (error.code === 'auth/weak-password') {
-      alert('❌ Senha muito fraca. Use no mínimo 6 caracteres.');
+      alert('❌ Senha muito fraca. Use pelo menos 6 caracteres.');
     } else {
-      alert('❌ Erro ao cadastrar: ' + error.message);
+      alert('❌ Erro ao criar conta: ' + error.message);
     }
   }
 });
 
-// 🔥 LOGOUT
-btnLogout.addEventListener('click', () => auth.signOut());
-
-// 🔥 LINKS
-linkToRegister.onclick = e => {
+// 🔥 ESQUECI SENHA
+forgotPasswordLink.addEventListener('click', async e => {
   e.preventDefault();
-  switchScreen('register');
-};
-
-linkToLogin.onclick = e => {
-  e.preventDefault();
-  switchScreen('login');
-};
-
-forgotPasswordLink.onclick = async e => {
-  e.preventDefault();
-  const email = prompt('Digite o email da sua conta para receber o link de recuperação de senha:');
-  
-  if (email && email.trim()) {
+  const email = prompt('Digite seu email para recuperar a senha:');
+  if (email) {
     try {
-      await auth.sendPasswordResetEmail(email.trim());
+      await auth.sendPasswordResetEmail(email);
       alert('✅ Email de recuperação enviado! Verifique sua caixa de entrada.');
     } catch (error) {
-      console.error('❌ Erro ao enviar email de recuperação:', error);
-      alert('❌ Erro ao enviar email: ' + error.message);
+      alert('❌ Erro: ' + error.message);
     }
-  } else if (email !== null) {
-    alert('❌ O email não pode ser vazio.');
   }
-};
+});
 
-// 🔥 UTILS
-function formatDateBR(date) {
-  const [y, m, d] = date.split('-');
-  return `${d}/${m}/${y}`;
+// 🔥 FUNÇÕES AUXILIARES
+function formatDateBR(dateStr) {
+  const [year, month, day] = dateStr.split('-');
+  return `${day}/${month}/${year}`;
 }
 
 function formatDateToISO(date) {
@@ -503,27 +501,29 @@ function loadServicesForDay(dateStr) {
     const serviceElement = document.createElement('div');
     serviceElement.className = `service-item status-${s.status}`;
     serviceElement.innerHTML = `
-      <div class="service-header">
-        <span class="service-time">${s.time}</span>
-        <span class="service-client">${s.clientName}</span>
+      <div class="service-header-row">
+        <span class="service-client-name">${s.clientName}</span>
         <span class="service-value">${formatCurrency(parseFloat(s.value) || 0)}</span>
       </div>
-      <div class="service-details">
-        <p><strong>Endereço:</strong> ${s.clientAddress}</p>
-        <p><strong>WhatsApp:</strong> <a href="https://wa.me/55${s.whatsapp.replace(/\D/g, '')}" target="_blank">${formatPhone(s.whatsapp)}</a></p>
-        <p><strong>Status:</strong> <span class="status-badge status-${s.status}">${s.status.toUpperCase()}</span></p>
-        ${s.notes ? `<p><strong>Obs:</strong> ${s.notes}</p>` : ''}
+      <div class="service-info">
+        <p><strong>⏰ Horário:</strong> ${s.time}</p>
+        <p><strong>📍 Endereço:</strong> ${s.clientAddress}</p>
+        <p><strong>📱 WhatsApp:</strong> <a href="https://wa.me/55${s.whatsapp.replace(/\D/g, '')}" target="_blank">${formatPhone(s.whatsapp)}</a></p>
+        <p><strong>📊 Status:</strong> <span class="status-text status-${s.status}">${s.status.toUpperCase()}</span></p>
+        ${s.notes ? `<p><strong>📝 Observações:</strong> ${s.notes}</p>` : ''}
         ${s.photoUrls && s.photoUrls.length > 0 ? `
-          <div class="photo-previews">
-            ${s.photoUrls.map(url => `<img src="${url}" alt="Foto do serviço" onclick="window.open('${url}', '_blank')">`).join('')}
+          <div class="service-photos">
+            ${s.photoUrls.map(url => `<img src="${url}" alt="Foto do serviço" class="service-photo-thumb" onclick="window.open('${url}', '_blank')">`).join('')}
           </div>
         ` : ''}
       </div>
       <div class="service-actions">
-        <button class="btn-secondary" onclick="window.editService('${s.id}')">✏️ Editar</button>
-        <button class="btn-danger" onclick="window.deleteService('${s.id}')">🗑️ Excluir</button>
-        ${s.status !== 'concluido' ? `<button class="btn-success" onclick="window.finishService('${s.id}')">✅ Concluir</button>` : ''}
-        <button class="btn-whatsapp" onclick="window.sendWhatsApp('${s.id}', 'reminder')">💬 Lembrete</button>
+        <button class="btn-action btn-whatsapp" onclick="window.sendWhatsApp('${s.id}', 'reminder')">💬 WhatsApp</button>
+        <button class="btn-action btn-maps" onclick="window.openMaps('${s.clientAddress}')">🗺️ Localizar</button>
+        <button class="btn-action btn-routes" onclick="window.openRoutes('${s.clientAddress}')">🛣️ Rotas</button>
+        <button class="btn-action btn-edit" onclick="window.editService('${s.id}')">✏️ Editar</button>
+        ${s.status !== 'concluido' ? `<button class="btn-action btn-finish" onclick="window.finishService('${s.id}')">✅ Concluir</button>` : ''}
+        <button class="btn-action btn-delete" onclick="window.deleteService('${s.id}')">🗑️ Excluir</button>
       </div>
     `;
     servicesList.appendChild(serviceElement);
@@ -587,7 +587,7 @@ serviceForm.addEventListener('submit', async e => {
     // 3. Limpar e Recarregar
     serviceForm.reset();
     serviceId.value = '';
-    formTitle.textContent = 'Novo Agendamento';
+    formTitle.textContent = '📝 Novo Agendamento';
     loadServices();
     
   } catch (error) {
@@ -613,7 +613,7 @@ window.editService = function(id) {
   serviceStatus.value = s.status;
   serviceValue.value = s.value || '';
   serviceNotes.value = s.notes || '';
-  formTitle.textContent = 'Editar Agendamento';
+  formTitle.textContent = '✏️ Editar Agendamento';
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
@@ -648,7 +648,7 @@ window.finishService = async function(id) {
   }
 };
 
-// Função para WhatsApp (Placeholder se necessário)
+// 🔥 WHATSAPP
 function sendWhatsApp(serviceOrId, type) {
   let s = typeof serviceOrId === 'string' ? allServices.find(x => x.id === serviceOrId) : serviceOrId;
   if(!s) return;
@@ -665,5 +665,64 @@ function sendWhatsApp(serviceOrId, type) {
   window.open(`https://wa.me/55${phone}?text=${encodeURIComponent(message)}`, '_blank');
 }
 
-// Expor funções globais
 window.sendWhatsApp = sendWhatsApp;
+
+// 🔥 GOOGLE MAPS - LOCALIZAR
+window.openMaps = function(address) {
+  if (!address) {
+    alert('Endereço não disponível');
+    return;
+  }
+  const encodedAddress = encodeURIComponent(address);
+  window.open(`https://www.google.com/maps/search/${encodedAddress}`, '_blank');
+};
+
+// 🔥 GOOGLE MAPS - ROTAS (NOVO)
+window.openRoutes = function(address) {
+  if (!address) {
+    alert('Endereço não disponível');
+    return;
+  }
+  const encodedAddress = encodeURIComponent(address);
+  window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}`, '_blank');
+};
+
+// 🔥 EXPORTAR PDF
+document.getElementById('btnExportPDF')?.addEventListener('click', () => {
+  const selectedDate = formatDateBR(formatDateToISO(currentDate));
+  const services = allServices.filter(s => s.date === formatDateToISO(currentDate));
+  
+  let htmlContent = `
+    <h2>Agendamentos do dia ${selectedDate}</h2>
+    <table border="1" cellpadding="10">
+      <tr>
+        <th>Horário</th>
+        <th>Cliente</th>
+        <th>Endereço</th>
+        <th>Valor</th>
+        <th>Status</th>
+      </tr>
+  `;
+  
+  services.forEach(s => {
+    htmlContent += `
+      <tr>
+        <td>${s.time}</td>
+        <td>${s.clientName}</td>
+        <td>${s.clientAddress}</td>
+        <td>${formatCurrency(parseFloat(s.value) || 0)}</td>
+        <td>${s.status.toUpperCase()}</td>
+      </tr>
+    `;
+  });
+  
+  htmlContent += '</table>';
+  
+  const newWindow = window.open('', '', 'width=800,height=600');
+  newWindow.document.write(htmlContent);
+  newWindow.document.close();
+  newWindow.print();
+});
+
+// 🔥 INICIALIZAR
+console.log('✅ Sistema carregado e pronto para uso!');
