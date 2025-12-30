@@ -519,7 +519,6 @@ function loadServicesForDay(dateStr) {
       </div>
       <div class="service-actions">
         <button class="btn-action btn-whatsapp" onclick="window.sendWhatsApp('${s.id}', 'reminder')">💬 WhatsApp</button>
-        <button class="btn-action btn-maps" onclick="window.openMaps('${s.clientAddress}')">🗺️ Localizar</button>
         <button class="btn-action btn-routes" onclick="window.openRoutes('${s.clientAddress}')">🛣️ Rotas</button>
         <button class="btn-action btn-edit" onclick="window.editService('${s.id}')">✏️ Editar</button>
         ${s.status !== 'concluido' ? `<button class="btn-action btn-finish" onclick="window.finishService('${s.id}')">✅ Concluir</button>` : ''}
@@ -667,17 +666,7 @@ function sendWhatsApp(serviceOrId, type) {
 
 window.sendWhatsApp = sendWhatsApp;
 
-// 🔥 GOOGLE MAPS - LOCALIZAR
-window.openMaps = function(address) {
-  if (!address) {
-    alert('Endereço não disponível');
-    return;
-  }
-  const encodedAddress = encodeURIComponent(address);
-  window.open(`https://www.google.com/maps/search/${encodedAddress}`, '_blank');
-};
-
-// 🔥 GOOGLE MAPS - ROTAS (NOVO)
+// 🔥 GOOGLE MAPS - ROTAS
 window.openRoutes = function(address) {
   if (!address) {
     alert('Endereço não disponível');

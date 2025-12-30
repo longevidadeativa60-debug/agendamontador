@@ -586,8 +586,10 @@ body {
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 0.5rem;
+  gap: 0.25rem;
   margin-bottom: 1rem;
+  width: 100%;
+  overflow-x: auto;
 }
 
 .calendar-day-header {
@@ -611,7 +613,8 @@ body {
   transition: var(--transition);
   position: relative;
   background: white;
-  min-height: 60px;
+  min-height: 50px;
+  padding: 0.25rem;
 }
 
 .calendar-day:hover:not(.empty) {
@@ -974,15 +977,21 @@ body {
   }
   
   .calendar-grid {
-    gap: 0.25rem;
+    gap: 0.15rem;
   }
   
   .calendar-day {
-    min-height: 50px;
+    min-height: 45px;
+    padding: 0.15rem;
   }
   
   .day-number {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
+  }
+  
+  .calendar-day-header {
+    font-size: 0.7rem;
+    padding: 0.5rem 0;
   }
   
   .dashboard-cards {
@@ -1008,7 +1017,7 @@ body {
 
 @media (max-width: 480px) {
   .app-container {
-    padding: 1rem;
+    padding: 0.75rem;
   }
   
   .top-bar {
@@ -1035,6 +1044,31 @@ body {
   
   .section-title {
     font-size: 0.95rem;
+  }
+  
+  .calendar-grid {
+    gap: 0.1rem;
+  }
+  
+  .calendar-day {
+    min-height: 40px;
+    padding: 0.1rem;
+    font-size: 0.7rem;
+  }
+  
+  .calendar-day-header {
+    font-size: 0.65rem;
+    padding: 0.4rem 0;
+  }
+  
+  .day-number {
+    font-size: 0.65rem;
+    margin-bottom: 0.1rem;
+  }
+  
+  .status-dot {
+    width: 4px;
+    height: 4px;
   }
 }
 
